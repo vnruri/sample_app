@@ -41,4 +41,18 @@ describe Micropost do
     before { @micropost.content = "a" * 141 }
     it { should_not be_valid }
   end
+	
+	describe "from_everyone" do
+	
+		let(:user)				{ FactoryGirl.create(:user) }
+		let(:other_user)	{ FactoryGirl.create(:user) }
+		
+		let(:own_post)    {       user.microposts.create!(content: "foo") }
+    let(:other_post)  { other_user.microposts.create!(content: "bar") }
+		
+		subject { Micropost.all }
+		
+		it { should include(own_post) }
+    it { should include(other_post) }
+	end
 end

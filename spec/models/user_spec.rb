@@ -138,13 +138,21 @@ describe User do
     end
 		
 		describe "status" do
-      let(:unfollowed_post) do
-        FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+      let(:everyone) { FactoryGirl.create(:user) }
+			
+			subject { Micropost.all }
+			
+			before do
+        3.times { everyone.microposts.create!(content: "Lorem ipsum") }
       end
 
-      its(:feed) { should include(newer_micropost) }
-      its(:feed) { should include(older_micropost) }
-      its(:feed) { should_not include(unfollowed_post) }
+      it { should include(newer_micropost) }
+      it { should include(older_micropost) }
+      it do
+        everyone.microposts.each do |micropost|
+          should include(micropost)
+        end
+      end
     end
   end
 end
